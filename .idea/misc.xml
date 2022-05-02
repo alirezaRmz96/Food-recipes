@@ -20,6 +20,8 @@
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_swipe.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_category.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_information.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/layout_information.xml" value="0.1" />
         <entry key="app/src/main/res/menu/bottom_menu.xml" value="0.1685185185185185" />
       </map>
     </option>
