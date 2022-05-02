@@ -1,23 +1,22 @@
 package com.example.food.ui.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.food.data.model.allList.Result
+import com.example.food.data.model.allList.AllFoodResultList
 import com.example.food.databinding.ItemInformationBinding
 
 class InformationAdapter:RecyclerView.Adapter<InformationAdapter.InformationViewHolder> (){
 
-    private val callback = object : DiffUtil.ItemCallback<Result>(){
-        override fun areItemsTheSame(oldItem: Result, newItem: Result): Boolean {
+    private val callback = object : DiffUtil.ItemCallback<AllFoodResultList>(){
+        override fun areItemsTheSame(oldItem: AllFoodResultList, newItem: AllFoodResultList): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: Result, newItem: Result): Boolean {
+        override fun areContentsTheSame(oldItem: AllFoodResultList, newItem: AllFoodResultList): Boolean {
             return oldItem == newItem
         }
 
@@ -43,7 +42,7 @@ class InformationAdapter:RecyclerView.Adapter<InformationAdapter.InformationView
     inner class InformationViewHolder(
         private val binding: ItemInformationBinding
     ):RecyclerView.ViewHolder(binding.root){
-        fun bind(food: Result){
+        fun bind(food: AllFoodResultList){
 
             binding.tvFood.text = food.title
 
