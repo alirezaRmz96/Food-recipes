@@ -1,14 +1,13 @@
 package com.example.food.ui.adapter
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.food.R
-import com.example.food.data.Category
+import com.example.food.data.util.Category
 import com.example.food.databinding.ItemCategoryBinding
 import kotlin.properties.Delegates
 
@@ -33,8 +32,7 @@ class CategoryItemAdapter : RecyclerView.Adapter<CategoryItemAdapter.CategoryVie
     val differ = AsyncListDiffer(this,callback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
-        val binding = ItemCategoryBinding
-            .inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding = ItemCategoryBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return CategoryViewHolder(binding)
     }
 
@@ -50,7 +48,6 @@ class CategoryItemAdapter : RecyclerView.Adapter<CategoryItemAdapter.CategoryVie
     inner class CategoryViewHolder(
         private val binding: ItemCategoryBinding
     ):RecyclerView.ViewHolder(binding.root){
-        @SuppressLint("ResourceAsColor")
         fun bind(category: Category){
             isChecked = false
             binding.cateText.text = category.CategoryName
