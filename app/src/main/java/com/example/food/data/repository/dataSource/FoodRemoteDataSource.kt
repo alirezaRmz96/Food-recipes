@@ -1,0 +1,10 @@
+package com.example.food.data.repository.dataSource
+
+import com.example.food.data.model.allList.AllFoodList
+import com.example.food.data.model.specialFood.SpecialFood
+import retrofit2.Response
+
+interface FoodRemoteDataSource {
+    suspend fun getAllFood():Response<AllFoodList>
+    suspend fun getInformationFood(ingredients:String):Response<SpecialFood>
+}

@@ -1,8 +1,8 @@
 package com.example.food.di
 
 import com.example.food.data.api.FoodApi
-import com.example.food.data.repository.FoodRemoteDataSource
-import com.example.food.data.repository.FoodRemoteDataSourceImpl
+import com.example.food.data.repository.dataSource.FoodRemoteDataSource
+import com.example.food.data.repository.dataSourceImpl.FoodRemoteDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,7 +16,7 @@ class RemoteDataModule {
     @Provides
     fun provideFoodRemoteDataSource(
         foodApi: FoodApi
-    ):FoodRemoteDataSource{
+    ): FoodRemoteDataSource {
         return FoodRemoteDataSourceImpl(foodApi)
     }
 }

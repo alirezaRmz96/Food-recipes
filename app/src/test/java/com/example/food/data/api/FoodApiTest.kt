@@ -49,6 +49,16 @@ class FoodApiTest {
             assertThat(responseBody!!.results.size).isEqualTo(10)
         }
     }
+    @Test
+    fun getSpecialFood_sentRequest_receivedExpected(){
+        runBlocking {
+            enqueueMockResponse("SpecialFood.json")
+            val responseBody = service.getSpecialFood(ingredients = "Caramel")
+            val request = server.takeRequest()
+            assertThat(responseBody).isNotNull()
+            assertThat(request.path).isEqualTo("/findByIngredients?apiKey=94208cb2244e42ee88ebb0c602037d82&ingredients=Caramel&number=10")
+        }
+    }
 
 
 

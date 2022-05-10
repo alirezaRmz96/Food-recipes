@@ -1,25 +1,24 @@
 package com.example.food.ui.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.food.R
 import com.example.food.data.util.Category
 import com.example.food.databinding.ItemCategoryBinding
-import kotlin.properties.Delegates
 
-/**
+/***
  *  for get and set list we use DiffUtil so we can check that's list is same or not then pass it
  * This class finds the difference between two lists and provides the updated list as an output.
  *  This class is used to notify updates to a RecyclerView Adapter.
  * **/
+/***
+ *  still has problem ->> cant design cate btn the way i want :(
+ * **/
 
 class CategoryItemAdapter : RecyclerView.Adapter<CategoryItemAdapter.CategoryViewHolder>(){
 
-    private var isChecked by Delegates.notNull<Boolean>()
     private val callback = object : DiffUtil.ItemCallback<Category>(){
         override fun areItemsTheSame(oldItem: Category, newItem: Category): Boolean {
             return oldItem.CategoryName == newItem.CategoryName
@@ -47,28 +46,23 @@ class CategoryItemAdapter : RecyclerView.Adapter<CategoryItemAdapter.CategoryVie
 
     inner class CategoryViewHolder(
         private val binding: ItemCategoryBinding
-    ):RecyclerView.ViewHolder(binding.root){
-        fun bind(category: Category){
-            isChecked = false
+    ):RecyclerView.ViewHolder(binding.root) {
+        fun bind(category: Category) {
+
             binding.cateText.text = category.CategoryName
-            //val bitmap = BitmapFactory.decodeResource(Resources(),category.CategoryImage)
-            binding.cateImage.setImageResource(category.CategoryImage)
-           // binding.cateImage.setBackgroundResource(R.drawable.rounded_circle)
+           binding.cateImage.setImageResource(category.CategoryImage)
+
             binding.root.setOnClickListener {
-                isChecked =! isChecked
-                if (isChecked)  binding.cateImage.setBackgroundResource(R.drawable.rounded_circle_un)
-                else binding.cateImage.setBackgroundResource(R.drawable.rounded_circle)
                 onItemClickListener?.let {
                     it(category)
                 }
             }
         }
-        private var onItemClickListener : ((Category) -> Unit)? = null
-
-        fun setOnItemClickListener(listener:(Category) -> Unit){
-            onItemClickListener = listener
-        }
     }
 
+    private var onItemClickListener: ((Category) -> Unit)? = null
+    fun setOnItemClickListener(listener: (Category) -> Unit) {
+        onItemClickListener = listener
+    }
 
 }
