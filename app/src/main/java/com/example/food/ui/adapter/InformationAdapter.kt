@@ -7,11 +7,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.food.data.model.allList.AllFoodResultList
+import com.example.food.data.model.specialFood.SpecialFoodItem
 import com.example.food.databinding.ItemInformationBinding
 
 class InformationAdapter:RecyclerView.Adapter<InformationAdapter.InformationViewHolder> (){
 
-    private val callback = object : DiffUtil.ItemCallback<AllFoodResultList>(){
+    private val callbackAllFood = object : DiffUtil.ItemCallback<AllFoodResultList>(){
         override fun areItemsTheSame(oldItem: AllFoodResultList, newItem: AllFoodResultList): Boolean {
             return oldItem.id == newItem.id
         }
@@ -22,7 +23,7 @@ class InformationAdapter:RecyclerView.Adapter<InformationAdapter.InformationView
 
     }
 
-    val differ = AsyncListDiffer(this,callback)
+    val differAllFood = AsyncListDiffer(this,callbackAllFood)
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InformationViewHolder {
@@ -31,12 +32,12 @@ class InformationAdapter:RecyclerView.Adapter<InformationAdapter.InformationView
     }
 
     override fun onBindViewHolder(holder: InformationViewHolder, position: Int) {
-        val information = differ.currentList[position]
+        val information = differAllFood.currentList[position]
         holder.bind(information)
     }
 
     override fun getItemCount(): Int {
-        return differ.currentList.size
+        return differAllFood.currentList.size
     }
 
     inner class InformationViewHolder(

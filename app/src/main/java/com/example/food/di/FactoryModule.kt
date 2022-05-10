@@ -2,6 +2,7 @@ package com.example.food.di
 
 import com.example.food.domain.repository.IsNetWorking
 import com.example.food.domain.usecase.GetAllFoodUseCase
+import com.example.food.domain.usecase.GetInformationFoodUseCase
 import com.example.food.ui.viewModel.FoodViewModelFactory
 import dagger.Module
 import dagger.Provides
@@ -16,10 +17,11 @@ class FactoryModule {
     @Provides
     fun provideFoodViewModelFactory(
         getAllFoodUseCase: GetAllFoodUseCase,
+        getInformationFoodUseCase: GetInformationFoodUseCase,
         isNetWorking: IsNetWorking
     ): FoodViewModelFactory{
         return FoodViewModelFactory(
-            getAllFoodUseCase,isNetWorking
+            getAllFoodUseCase,getInformationFoodUseCase,isNetWorking
         )
 
     }
