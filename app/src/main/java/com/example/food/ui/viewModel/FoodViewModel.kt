@@ -5,11 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.food.data.model.allList.AllFoodList
+import com.example.food.data.model.receFromId.RecepFromIdList
 import com.example.food.data.model.specialFood.SpecialFood
 import com.example.food.data.util.Resource
 import com.example.food.domain.repository.IsNetWorking
 import com.example.food.domain.usecase.GetAllFoodUseCase
 import com.example.food.domain.usecase.GetInformationFoodUseCase
+import com.example.food.domain.usecase.GetRecepFromIdUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -28,10 +30,12 @@ import java.lang.Exception
 class FoodViewModel(
     private val getAllFoodUseCase: GetAllFoodUseCase,
     private val getInformationFoodUseCase: GetInformationFoodUseCase,
-    private val isNetWorking : IsNetWorking
+    private val isNetWorking : IsNetWorking,
+    private val getRecepFromIdUseCase: GetRecepFromIdUseCase
 ):ViewModel() {
     val foodLiveData : MutableLiveData<Resource<AllFoodList>> = MutableLiveData()
     val foodInformationLiveData : MutableLiveData<Resource<SpecialFood>> = MutableLiveData()
+    val foodRecepFromID : MutableLiveData<Resource<RecepFromIdList>> = MutableLiveData()
     var lastString = ""
 
     fun getAllFood() = viewModelScope.launch() {
@@ -68,14 +72,30 @@ class FoodViewModel(
             foodInformationLiveData.postValue(Resource.Error(e.message.toString()))
         }
     }
+
+    fun getRecepFromId(id:Int) = viewModelScope.launch {
+        foodRecepFromID.postValue(Resource.Loading())
+        try {
+            if (isNetWorking.getNetWork()){
+                val apiResult = getRecepFromIdUseCase.execute(id)
+                foodRecepFromID.postValue(apiResult)
+            }
+            else {
+                foodRecepFromID.postValue(Resource.Error("Internet no connect"))
+            }
+        }catch (e:Exception){
+            foodRecepFromID.postValue(Resource.Error(e.message.toString()))
+        }
+    }
 }
 
 class FoodViewModelFactory (
     private val getAllFoodUseCase: GetAllFoodUseCase,
     private val getInformationFoodUseCase: GetInformationFoodUseCase,
-    private val isNetWorking : IsNetWorking
+    private val isNetWorking : IsNetWorking,
+    private val getRecepFromIdUseCase: GetRecepFromIdUseCase
 ):ViewModelProvider.Factory{
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return FoodViewModel(getAllFoodUseCase,getInformationFoodUseCase,isNetWorking) as T
+        return FoodViewModel(getAllFoodUseCase,getInformationFoodUseCase,isNetWorking,getRecepFromIdUseCase) as T
     }
 }

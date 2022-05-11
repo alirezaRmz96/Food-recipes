@@ -5,18 +5,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_constraintVertical_chainStyle="spread"
     tools:context=".ui.fragments.HomeFragment">
 
-    <Button
+    <ImageButton
         android:id="@+id/tab_bar"
         android:layout_width="@dimen/_20sdp"
         android:layout_height="@dimen/_20sdp"
         android:layout_marginStart="@dimen/_16sdp"
+        android:backgroundTint="@color/black"
         android:layout_marginTop="@dimen/_10sdp"
         android:layout_marginBottom="@dimen/_16sdp"
-        android:theme="@style/Button.black"
-        android:background="@drawable/toolbar"
+        android:background="@drawable/options"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title"
         app:layout_constraintTop_toTopOf="parent" />
@@ -126,9 +125,6 @@
             <include layout="@layout/item_information"/>
             <include layout="@layout/item_information"/>
         </LinearLayout>
-
-
     </com.facebook.shimmer.ShimmerFrameLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

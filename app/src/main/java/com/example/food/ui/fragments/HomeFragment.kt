@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout.HORIZONTAL
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.food.R
 import com.example.food.data.util.Category
@@ -26,6 +27,8 @@ class HomeFragment : Fragment() {
     private lateinit var mShimmerViewContainer: ShimmerFrameLayout;
     private lateinit var binding: FragmentHomeBinding
     private lateinit var foodViewModel: FoodViewModel
+    private var category = String()
+    private var categoryBool : Boolean = false
 
 //    @Inject
 //    lateinit var factory: FoodViewModelFactory
@@ -44,6 +47,13 @@ class HomeFragment : Fragment() {
         Log.d("TAG", "onPause: ")
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (requireActivity() is MainActivity){
+            (activity as MainActivity?)!!.showBottomNavigationView()
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         foodViewModel = (activity as MainActivity).foodViewModel
         super.onViewCreated(view, savedInstanceState)
@@ -56,8 +66,32 @@ class HomeFragment : Fragment() {
 
         initRecyclerView()
         categoryItemAdapter.setOnItemClickListener { name ->
-
             foodViewModel.getInformationFood(name.CategoryName)
+            category = name.CategoryName
+            categoryBool = true
+
+        }
+        informationAdapter.setOnItemClickListenerInformation {
+            foodViewModel.getRecepFromId(it.id)
+//            val bundle = Bundle().apply {
+//                putSerializable("selected_food",it)
+//
+//            }
+            val bundle = Bundle().apply {
+                if (!categoryBool){
+                    category = "All"
+                }
+                putString("selected_category",category)
+            }
+            if (requireActivity() is MainActivity){
+                (activity as MainActivity?)!!.hideBottomNavigationView()
+            }
+
+            findNavController().navigate(
+                R.id.action_homeFragment_to_dishDetailsFragment2,
+                bundle
+            )
+
         }
         setUpViewForAllFood()
         setUpViewForInformationFood()
@@ -65,18 +99,16 @@ class HomeFragment : Fragment() {
 
 
     private fun setUpViewForAllFood() {
-        if (!foodViewModel.getAllFood().isCompleted){
-            foodViewModel.getAllFood()
-        }
+        foodViewModel.getAllFood()
 
         foodViewModel.foodLiveData.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Success -> {
+                    mShimmerViewContainer.stopShimmer()
+                    mShimmerViewContainer.visibility = View.GONE
                     response.data?.let {
                         Log.d("TAG", "Data AllFood: ")
                         informationAdapter.differAllFood.submitList(it.results)
-                        mShimmerViewContainer.stopShimmer()
-                        mShimmerViewContainer.visibility = View.GONE
                     }
                 }
                 is Resource.Error -> {
@@ -141,7 +173,8 @@ class HomeFragment : Fragment() {
         }
 
     }
-    private fun setUpViewModel(){
+
+    private fun setUpViewModel() {
 //        foodViewModel = ViewModelProvider(this,factory)
 //            .get(FoodViewModel::class.java)
     }
