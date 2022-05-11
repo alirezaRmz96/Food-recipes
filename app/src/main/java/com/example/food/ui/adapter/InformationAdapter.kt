@@ -50,8 +50,17 @@ class InformationAdapter:RecyclerView.Adapter<InformationAdapter.InformationView
             Glide.with(binding.ivFood.context)
                 .load(food.image)
                 .into(binding.ivFood)
+
+            binding.root.setOnClickListener {
+                onClickItemListener?.let {
+                    it(food)
+                }
+            }
         }
     }
-
+    private var onClickItemListener : ((AllFoodResultList) -> Unit)? = null
+    fun setOnItemClickListenerInformation(listener : (AllFoodResultList) -> Unit){
+        onClickItemListener = listener
+    }
 
 }

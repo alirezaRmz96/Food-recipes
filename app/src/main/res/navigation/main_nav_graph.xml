@@ -9,7 +9,11 @@
         android:id="@+id/homeFragment"
         android:name="com.example.food.ui.fragments.HomeFragment"
         android:label="@string/home_title"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_dishDetailsFragment2"
+            app:destination="@id/dishDetailsFragment2" />
+    </fragment>
     <fragment
         android:id="@+id/swipeFragment"
         android:name="com.example.food.ui.fragments.SwipeFragment"
@@ -20,4 +24,18 @@
         android:name="com.example.food.ui.fragments.ProfileFragment"
         android:label="@string/profile_title"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/dishDetailsFragment2"
+        android:name="com.example.food.ui.fragments.DishDetailsFragment"
+        android:label="fragment_dish_details"
+        tools:layout="@layout/fragment_dish_details" >
+
+<!--        <argument-->
+<!--            android:name="selected_food"-->
+<!--            app:argType="com.example.food.data.model.allList.AllFoodResultList" />-->
+
+        <argument
+            android:name="selected_category"
+            app:argType="string" />
+    </fragment>
 </navigation>

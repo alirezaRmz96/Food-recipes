@@ -9,4 +9,9 @@
     <string name="search">Search</string>
     <string name="sh_title">Search Eny Recipes</string>
     <string name="content_description_search">Image for search Icon</string>
+    <string name="instructions">Instructions</string>
+    <string name="summary">Summary</string>
+    <string name="dish_time_ready">%s min</string>
+    <string name="dish_servings">%s serving</string>
+    <string name="dish_dollar">%s </string>
 </resources>

@@ -4,23 +4,32 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/bottom_nav_color.xml" value="0.119" />
+        <entry key="app/src/main/res/drawable/custom_progress_bar.xml" value="0.106" />
+        <entry key="app/src/main/res/drawable/favorite_button_backround.xml" value="0.1235" />
+        <entry key="app/src/main/res/drawable/ic_arrow_back.xml" value="0.1245" />
         <entry key="app/src/main/res/drawable/ic_favorite.xml" value="0.1025" />
         <entry key="app/src/main/res/drawable/ic_favorite_border.xml" value="0.1025" />
+        <entry key="app/src/main/res/drawable/ic_group.xml" value="0.147" />
         <entry key="app/src/main/res/drawable/ic_home.xml" value="0.2045" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1025" />
         <entry key="app/src/main/res/drawable/ic_person.xml" value="0.1025" />
         <entry key="app/src/main/res/drawable/ic_person_outline.xml" value="0.1025" />
         <entry key="app/src/main/res/drawable/ic_search.xml" value="0.189" />
+        <entry key="app/src/main/res/drawable/ic_share.xml" value="0.1245" />
         <entry key="app/src/main/res/drawable/rounded_circle.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/rounded_circle_un.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/rounded_rectangle.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/shape_for_detials.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/test.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/custom_progress.xml" value="0.13057059558517284" />
+        <entry key="app/src/main/res/layout/dish_details.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_dish_details.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_swipe.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_category.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/item_information.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/item_information.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/layout_information.xml" value="0.1" />
         <entry key="app/src/main/res/menu/bottom_menu.xml" value="0.1" />
       </map>
