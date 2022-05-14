@@ -14,4 +14,9 @@
     <string name="dish_time_ready">%s min</string>
     <string name="dish_servings">%s serving</string>
     <string name="dish_dollar">%s </string>
+    <string name="image">image</string>
+    <string name="whats_up">Whats Up</string>
+    <string name="instagram">Instagram</string>
+    <string name="telegram">Telegram</string>
+    <string name="do_you_want_see_more">Do You want see more ?</string>
 </resources>

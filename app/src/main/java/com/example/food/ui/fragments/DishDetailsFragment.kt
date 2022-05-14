@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -15,6 +17,7 @@ import com.example.food.data.util.Resource
 import com.example.food.databinding.FragmentDishDetailsBinding
 import com.example.food.ui.MainActivity
 import com.example.food.ui.viewModel.FoodViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class DishDetailsFragment : Fragment() {
 
@@ -56,9 +59,12 @@ class DishDetailsFragment : Fragment() {
                             tvDishTime.text =getString(R.string.dish_time_ready,it.readyInMinutes.toString())
                             tvDishServings.text =getString(R.string.dish_servings,it.servings.toString() )
                             tvDishPrice.text =getString(R.string.dish_dollar, it.pricePerServing.toString())
+                            //we can use below to remove < and > from my text
+                            //but i can regex maybe in feature
+                            //val pattern1 = it.instructions.replace(Regex("^</(.*)([>])")," ")
                             tvDishInstructions.text = it.instructions
                             tvDishSummary.text = it.summary
-                        }
+                      }
                     }
                 }
                 is Resource.Error -> {
@@ -72,7 +78,27 @@ class DishDetailsFragment : Fragment() {
                 }
             }
         }
+
+        fragmentDishDetailsBinding.ivBack.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
+        fragmentDishDetailsBinding.ivShare.setOnClickListener {
+            bottomSheet()
+        }
+
     }
+    private fun bottomSheet(){
+        val dialog = BottomSheetDialog(requireActivity())
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_dialog,null)
+        val btnClose = view.findViewById<Button>(R.id.idBtnDismiss)
+        btnClose.setOnClickListener {
+            dialog.dismiss()
+        }
+        //dialog.setCancelable(false)
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
     private fun showCustomDialog(){
         mProgressDialog = Dialog(requireActivity())
 
@@ -82,8 +108,13 @@ class DishDetailsFragment : Fragment() {
         }
     }
     private fun hideProgressDialog() {
-        mProgressDialog?.let {
-            it.dismiss()
-        }
+        mProgressDialog?.dismiss()
+    }
+
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+//        fragmentDishDetailsBinding = null
     }
 }

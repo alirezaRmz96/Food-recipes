@@ -22,9 +22,10 @@
         <entry key="app/src/main/res/drawable/shape_for_detials.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/test.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/bottom_sheet_dialog.xml" value="0.33" />
         <entry key="app/src/main/res/layout/custom_progress.xml" value="0.13057059558517284" />
         <entry key="app/src/main/res/layout/dish_details.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_dish_details.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_dish_details.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_swipe.xml" value="0.1" />

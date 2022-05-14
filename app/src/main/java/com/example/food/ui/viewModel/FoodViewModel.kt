@@ -30,18 +30,18 @@ import java.lang.Exception
 class FoodViewModel(
     private val getAllFoodUseCase: GetAllFoodUseCase,
     private val getInformationFoodUseCase: GetInformationFoodUseCase,
-    private val isNetWorking : IsNetWorking,
+//    private val isNetWorking : IsNetWorking,
     private val getRecepFromIdUseCase: GetRecepFromIdUseCase
 ):ViewModel() {
     val foodLiveData : MutableLiveData<Resource<AllFoodList>> = MutableLiveData()
     val foodInformationLiveData : MutableLiveData<Resource<SpecialFood>> = MutableLiveData()
     val foodRecepFromID : MutableLiveData<Resource<RecepFromIdList>> = MutableLiveData()
-    var lastString = ""
+    private var lastString = ""
 
     fun getAllFood() = viewModelScope.launch() {
         foodLiveData.postValue(Resource.Loading())
         try {
-            if (isNetWorking.getNetWork()){
+//            if (isNetWorking.getNetWork()){
                 //1
                 if (lastString.isEmpty()) {
                     //2
@@ -49,9 +49,9 @@ class FoodViewModel(
                     foodLiveData.postValue(apiResult)
                 } else
                     getInformationFood(lastString)
-            }else{
-                foodLiveData.postValue(Resource.Error("Internet no connect"))
-            }
+//            }else{
+//                foodLiveData.postValue(Resource.Error("Internet no connect"))
+//            }
         }catch (e:Exception){
             foodLiveData.postValue(Resource.Error(e.message.toString()))
         }
@@ -60,14 +60,14 @@ class FoodViewModel(
     fun getInformationFood(ingredients : String) = viewModelScope.launch(Dispatchers.IO) {
         foodInformationLiveData.postValue(Resource.Loading())
         try {
-            if (isNetWorking.getNetWork()){
+//            if (isNetWorking.getNetWork()){
                 //3
                 val apiResult = getInformationFoodUseCase.execute(ingredients)
                 lastString = ingredients
                 foodInformationLiveData.postValue(apiResult)
-            }else{
-                foodInformationLiveData.postValue(Resource.Error("Internet no connect"))
-            }
+//            }else{
+//                foodInformationLiveData.postValue(Resource.Error("Internet no connect"))
+//            }
         }catch (e:Exception){
             foodInformationLiveData.postValue(Resource.Error(e.message.toString()))
         }
@@ -76,13 +76,13 @@ class FoodViewModel(
     fun getRecepFromId(id:Int) = viewModelScope.launch {
         foodRecepFromID.postValue(Resource.Loading())
         try {
-            if (isNetWorking.getNetWork()){
+//            if (isNetWorking.getNetWork()){
                 val apiResult = getRecepFromIdUseCase.execute(id)
                 foodRecepFromID.postValue(apiResult)
-            }
-            else {
-                foodRecepFromID.postValue(Resource.Error("Internet no connect"))
-            }
+//            }
+//            else {
+//                foodRecepFromID.postValue(Resource.Error("Internet no connect"))
+//            }
         }catch (e:Exception){
             foodRecepFromID.postValue(Resource.Error(e.message.toString()))
         }
@@ -92,10 +92,11 @@ class FoodViewModel(
 class FoodViewModelFactory (
     private val getAllFoodUseCase: GetAllFoodUseCase,
     private val getInformationFoodUseCase: GetInformationFoodUseCase,
-    private val isNetWorking : IsNetWorking,
+//    private val isNetWorking : IsNetWorking,
     private val getRecepFromIdUseCase: GetRecepFromIdUseCase
 ):ViewModelProvider.Factory{
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return FoodViewModel(getAllFoodUseCase,getInformationFoodUseCase,isNetWorking,getRecepFromIdUseCase) as T
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return FoodViewModel(getAllFoodUseCase,getInformationFoodUseCase,getRecepFromIdUseCase) as T
     }
 }
