@@ -19,11 +19,11 @@ class FactoryModule {
     fun provideFoodViewModelFactory(
         getAllFoodUseCase: GetAllFoodUseCase,
         getInformationFoodUseCase: GetInformationFoodUseCase,
-        isNetWorking: IsNetWorking,
+//        isNetWorking: IsNetWorking,
         getRecepFromIdUseCase: GetRecepFromIdUseCase
     ): FoodViewModelFactory{
         return FoodViewModelFactory(
-            getAllFoodUseCase,getInformationFoodUseCase,isNetWorking,getRecepFromIdUseCase
+            getAllFoodUseCase,getInformationFoodUseCase,getRecepFromIdUseCase
         )
 
     }

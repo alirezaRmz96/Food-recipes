@@ -221,7 +221,6 @@
                 android:layout_marginEnd="@dimen/_25sdp"/>
         </RelativeLayout>
 
-
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

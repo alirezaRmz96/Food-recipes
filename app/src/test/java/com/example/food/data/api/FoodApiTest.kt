@@ -56,7 +56,7 @@ class FoodApiTest {
             val responseBody = service.getSpecialFood(ingredients = "Caramel")
             val request = server.takeRequest()
             assertThat(responseBody).isNotNull()
-            assertThat(request.path).isEqualTo("/findByIngredients?apiKey=94208cb2244e42ee88ebb0c602037d82&ingredients=Caramel&number=10")
+            assertThat(request.path).isEqualTo("/findByIngredients?apiKey=b7789ce495454fa281f4d2500f9bcb53&ingredients=Caramel&number=10")
         }
     }
 
