@@ -8,22 +8,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.food.R
+import com.example.food.data.model.allList.AllFoodResultList
+import com.example.food.data.model.receFromId.RecepFromIdList
+import com.example.food.data.model.specialFood.SpecialFood
 import com.example.food.data.util.Resource
 import com.example.food.databinding.FragmentDishDetailsBinding
 import com.example.food.ui.MainActivity
+import com.example.food.ui.viewModel.FoodDBViewModel
 import com.example.food.ui.viewModel.FoodViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class DishDetailsFragment : Fragment() {
 
-    private lateinit var fragmentDishDetailsBinding: FragmentDishDetailsBinding
-    private lateinit var foodViewModel : FoodViewModel
-    private var mProgressDialog : Dialog? = null
+    private var fragmentDishDetailsBinding: FragmentDishDetailsBinding? = null
+    private lateinit var foodViewModel: FoodViewModel
+    private var mProgressDialog: Dialog? = null
+    private var recepFromIdList: RecepFromIdList? = null
+
+    private val foodDBViewModel: FoodDBViewModel by lazy {
+        (activity as MainActivity?)!!.getSharedViewModel(FoodDBViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,55 +50,119 @@ class DishDetailsFragment : Fragment() {
 //        val foodRecep = args.selectedFood
         val category = args.selectedCategory
 //        foodViewModel.getRecepFromId(foodRecep.id)
+        // if i don't observe it i cant see my favorite dish
+        foodViewModel.allDishesList.observe(viewLifecycleOwner) {
+            Log.d("TAG", "show fav favorite: " + it.size)
+        }
 
-        foodViewModel.foodRecepFromID.observe(viewLifecycleOwner){ response->
+        foodViewModel.loadRandomDish.observe(viewLifecycleOwner){ load->
+            if (load){
+                showCustomDialog()
+                fragmentDishDetailsBinding!!.scrollForDetails.visibility = View.GONE
+            }
+            else{
+                hideProgressDialog()
+                fragmentDishDetailsBinding!!.scrollForDetails.visibility = View.VISIBLE
+            }
+        }
+        foodViewModel.foodRecepFromID.observe(viewLifecycleOwner) { food ->
 
-            when(response){
-                is Resource.Success -> {
-                    hideProgressDialog()
-                    fragmentDishDetailsBinding.scrollForDetails.visibility = View.VISIBLE
-                    Log.d("TAG1", "Success getRecepFromId: Success")
-                    response.data?.let {
-                        fragmentDishDetailsBinding.apply {
-                            Glide.with(ivDishImage.context)
-                                .load(it.image)
-                                .into(ivDishImage)
-                            tvDishCategory.text = category
-                            tvDishName.text = it.title
-                            tvDishTime.text =getString(R.string.dish_time_ready,it.readyInMinutes.toString())
-                            tvDishServings.text =getString(R.string.dish_servings,it.servings.toString() )
-                            tvDishPrice.text =getString(R.string.dish_dollar, it.pricePerServing.toString())
-                            //we can use below to remove < and > from my text
-                            //but i can regex maybe in feature
-                            //val pattern1 = it.instructions.replace(Regex("^</(.*)([>])")," ")
-                            tvDishInstructions.text = it.instructions
-                            tvDishSummary.text = it.summary
-                      }
-                    }
-                }
-                is Resource.Error -> {
-                    showCustomDialog()
-                    Log.d("TAG1", "Error getRecepFromId: Error")
-                    Toast.makeText(context, "Some things went to wrong", Toast.LENGTH_SHORT).show()
-                }
-                is Resource.Loading ->{
-                    showCustomDialog()
-                    Log.d("TAG1", "Loading getRecepFromId: Loading")
+
+            showSpecialDish(food,category)
+        }
+    }
+
+    private fun showSpecialDish(food:RecepFromIdList,category:String) {
+        fragmentDishDetailsBinding?.apply {
+            ivBack.setOnClickListener {
+                requireActivity().onBackPressed()
+            }
+            ivShare.setOnClickListener {
+                bottomSheet()
+            }
+            Glide.with(ivDishImage.context)
+                .load(food.image)
+                .into(ivDishImage)
+            tvDishCategory.text = category
+            tvDishName.text = food.title
+            tvDishTime.text =
+                getString(R.string.dish_time_ready, food.readyInMinutes.toString())
+            tvDishServings.text =
+                getString(R.string.dish_servings, food.servings.toString())
+            tvDishPrice.text =
+                getString(R.string.dish_dollar, food.pricePerServing.toString())
+            tvDishInstructions.text = food.instructions
+            tvDishSummary.text = food.summary
+            if (food.favoriteDish) {
+                ivFavorDish.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireActivity(),
+                        R.drawable.ic_favorite_selected
+                    )
+                )
+            } else {
+                ivFavorDish.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireActivity(),
+                        R.drawable.ic_favorite_border
+                    )
+                )
+            }
+            Log.d("TAG", "show  recep: " + food.favoriteDish)
+            ivFavorDish.setOnClickListener {
+                Log.d("TAG", "show  recep: " + food.favoriteDish)
+                if (food.favoriteDish) {
+                    foodDBViewModel.delete(food)
+                    ivFavorDish.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            requireActivity(),
+                            R.drawable.ic_favorite_border
+                        )
+                    )
+                    Toast.makeText(
+                        requireActivity(),
+                        resources.getString(R.string.msg_already_added_to_favorites),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    food.favoriteDish = false
+                } else {
+                    recepFromIdList = RecepFromIdList(
+                        food.id,
+                        food.image,
+                        food.imageType,
+                        food.instructions,
+                        food.pricePerServing,
+                        food.readyInMinutes,
+                        food.servings,
+                        food.sourceName,
+                        food.sourceUrl,
+                        food.spoonacularSourceUrl,
+                        food.summary,
+                        food.title,
+                        true
+                    )
+                    Log.d("TAG", "show recep in fragment " + recepFromIdList)
+                    foodViewModel.insert(recepFromIdList!!)
+                    ivFavorDish.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            requireActivity(),
+                            R.drawable.ic_favorite_selected
+                        )
+                    )
+                    Toast.makeText(
+                        requireActivity(),
+                        resources.getString(R.string.msg_added_to_favorites),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    food.favoriteDish = true
                 }
             }
         }
-
-        fragmentDishDetailsBinding.ivBack.setOnClickListener {
-            requireActivity().onBackPressed()
-        }
-        fragmentDishDetailsBinding.ivShare.setOnClickListener {
-            bottomSheet()
-        }
-
     }
-    private fun bottomSheet(){
+
+    private fun bottomSheet() {
         val dialog = BottomSheetDialog(requireActivity())
-        val view = layoutInflater.inflate(R.layout.bottom_sheet_dialog,null)
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_dialog, null)
         val btnClose = view.findViewById<Button>(R.id.idBtnDismiss)
         btnClose.setOnClickListener {
             dialog.dismiss()
@@ -99,22 +172,22 @@ class DishDetailsFragment : Fragment() {
         dialog.show()
     }
 
-    private fun showCustomDialog(){
+    private fun showCustomDialog() {
         mProgressDialog = Dialog(requireActivity())
-
         mProgressDialog?.let {
             it.setContentView(R.layout.custom_progress)
             it.show()
         }
     }
+
     private fun hideProgressDialog() {
         mProgressDialog?.dismiss()
     }
 
 
-
     override fun onDestroy() {
         super.onDestroy()
-//        fragmentDishDetailsBinding = null
+        fragmentDishDetailsBinding = null
+        recepFromIdList = null
     }
 }

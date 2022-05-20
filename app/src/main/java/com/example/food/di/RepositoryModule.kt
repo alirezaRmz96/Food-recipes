@@ -2,6 +2,7 @@ package com.example.food.di
 
 import com.example.food.data.repository.dataSource.FoodRemoteDataSource
 import com.example.food.data.repository.FoodRepositoryImpl
+import com.example.food.data.repository.dataSource.FoodLocalDataSource
 import com.example.food.domain.repository.FoodRepository
 import dagger.Module
 import dagger.Provides
@@ -15,8 +16,9 @@ class RepositoryModule {
     @Singleton
     @Provides
     fun provideFoodRepository(
-        foodRemoteDataSource: FoodRemoteDataSource
+        foodRemoteDataSource: FoodRemoteDataSource,
+        foodLocalDataSource: FoodLocalDataSource
     ):FoodRepository{
-        return FoodRepositoryImpl(foodRemoteDataSource)
+        return FoodRepositoryImpl(foodRemoteDataSource,foodLocalDataSource)
     }
 }

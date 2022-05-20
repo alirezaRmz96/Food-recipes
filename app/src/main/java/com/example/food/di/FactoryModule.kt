@@ -1,5 +1,6 @@
 package com.example.food.di
 
+import com.example.food.domain.repository.FoodRepository
 import com.example.food.domain.repository.IsNetWorking
 import com.example.food.domain.usecase.GetAllFoodUseCase
 import com.example.food.domain.usecase.GetInformationFoodUseCase
@@ -19,11 +20,12 @@ class FactoryModule {
     fun provideFoodViewModelFactory(
         getAllFoodUseCase: GetAllFoodUseCase,
         getInformationFoodUseCase: GetInformationFoodUseCase,
+        foodRepository: FoodRepository,
 //        isNetWorking: IsNetWorking,
         getRecepFromIdUseCase: GetRecepFromIdUseCase
     ): FoodViewModelFactory{
         return FoodViewModelFactory(
-            getAllFoodUseCase,getInformationFoodUseCase,getRecepFromIdUseCase
+            getAllFoodUseCase,getInformationFoodUseCase,getRecepFromIdUseCase,foodRepository
         )
 
     }

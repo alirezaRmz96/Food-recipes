@@ -19,4 +19,6 @@
     <string name="instagram">Instagram</string>
     <string name="telegram">Telegram</string>
     <string name="do_you_want_see_more">Do You want see more ?</string>
+    <string name="msg_already_added_to_favorites">You have deleted the dish on your favorites.</string>
+    <string name="msg_added_to_favorites">You have added the dish to your favorites.</string>
 </resources>
