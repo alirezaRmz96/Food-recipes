@@ -17,6 +17,7 @@ import com.example.food.databinding.FragmentHomeBinding
 import com.example.food.ui.MainActivity
 import com.example.food.ui.adapter.CategoryItemAdapter
 import com.example.food.ui.adapter.InformationAdapter
+import com.example.food.ui.viewModel.FoodDBViewModel
 import com.example.food.ui.viewModel.FoodViewModel
 import com.facebook.shimmer.ShimmerFrameLayout
 
@@ -30,9 +31,6 @@ class HomeFragment : Fragment() {
     private var category = String()
     private var categoryBool : Boolean = false
 
-//    @Inject
-//    lateinit var factory: FoodViewModelFactory
-//    private lateinit var foodViewModel: FoodViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,11 +38,6 @@ class HomeFragment : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.fragment_home, container, false)
 
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d("TAG", "onPause: ")
     }
 
     override fun onResume() {
@@ -174,10 +167,6 @@ class HomeFragment : Fragment() {
 
     }
 
-    private fun setUpViewModel() {
-//        foodViewModel = ViewModelProvider(this,factory)
-//            .get(FoodViewModel::class.java)
-    }
 
 }
 

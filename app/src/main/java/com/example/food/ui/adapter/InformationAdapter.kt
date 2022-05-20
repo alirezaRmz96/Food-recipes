@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.food.data.model.allList.AllFoodResultList
-import com.example.food.data.model.specialFood.SpecialFoodItem
 import com.example.food.databinding.ItemInformationBinding
 
 class InformationAdapter:RecyclerView.Adapter<InformationAdapter.InformationViewHolder> (){

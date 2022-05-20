@@ -3,6 +3,7 @@ package com.example.food.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -45,6 +46,9 @@ class MainActivity : AppCompatActivity() {
        //setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+    }
+    fun <T : ViewModel> getSharedViewModel(viewModel: Class<T>): T {
+        return ViewModelProvider(this).get(viewModel)
     }
     fun hideBottomNavigationView(){
         mBinding.navView.clearAnimation()

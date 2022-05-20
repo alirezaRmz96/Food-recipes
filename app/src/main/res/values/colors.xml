@@ -14,4 +14,5 @@
     <color name="sh_color_hint">#78909C</color>
     <color name="blue_grey_700">#37474f</color>
     <color name="grey_900">#212121</color>
+    <color name="saved_button">#f4f4f4</color>
 </resources>

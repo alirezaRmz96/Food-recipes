@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id  "androidx.navigation.safeargs.kotlin"
     id 'kotlin-kapt'
+    id 'kotlin-android'
     id "dagger.hilt.android.plugin"
     id 'kotlin-parcelize'
 }
@@ -36,11 +37,34 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.1.1'
     }
 }
 
 dependencies {
-    //navigation
+
+    //>>>>>>>>>>>>>>>>>>compose<<<<<<<<<<<<<<
+    // Integration with activities
+    implementation 'androidx.activity:activity-compose:1.4.0'
+    // Compose Material Design
+    implementation 'androidx.compose.material:material:1.1.1'
+    // Animations
+    implementation 'androidx.compose.animation:animation:1.1.1'
+    // Tooling support (Previews, etc.)
+    implementation 'androidx.compose.ui:ui-tooling:1.1.1'
+    // Integration with ViewModels
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1'
+    // UI Tests
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.1.1'
+    // When using a MDC theme
+    implementation "com.google.android.material:compose-theme-adapter:1.1.9"
+    // When using a AppCompat theme
+    implementation "com.google.accompanist:accompanist-appcompat-theme:0.16.0"
+
+    //>>>>>>>>>>>>>>>>>>navigation<<<<<<<<<<<<<<
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 
@@ -50,7 +74,6 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
@@ -60,8 +83,8 @@ dependencies {
 
     // Networking
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
-    implementation "com.squareup.okhttp3:okhttp:4.9.3"
-    implementation "com.squareup.okhttp3:logging-interceptor:4.7.2"
+    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.2"
+    implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2"
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
 
     //Coroutine
@@ -72,6 +95,8 @@ dependencies {
     // Life cycle
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.1"
 
     //viewModel
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
@@ -87,8 +112,13 @@ dependencies {
     //shimmer
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
+    def roomVersion = "2.4.2"
+    implementation"androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation "androidx.room:room-ktx:$roomVersion"
 
-    //** TESTING *//
+    //** ----------------------TESTING--------------------------------*//
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation "androidx.arch.core:core-testing:2.1.0"
     //mock web server
@@ -99,9 +129,9 @@ dependencies {
     androidTestImplementation "io.mockk:mockk-android:1.12.0"
 
     // testImplementation for pure JVM unit tests coroutine
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2-native-mt"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1"
     // androidTestImplementation for Android instrumentation tests coroutine
-    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2-native-mt"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1"
     //truth
     testImplementation "com.google.truth:truth:1.1.3"
 }
