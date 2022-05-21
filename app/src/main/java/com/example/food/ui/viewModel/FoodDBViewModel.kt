@@ -1,13 +1,15 @@
 package com.example.food.ui.viewModel
 
+import android.util.Log
 import androidx.lifecycle.*
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.food.data.model.allList.AllFoodResultList
 import com.example.food.data.model.receFromId.RecepFromIdList
 import com.example.food.data.util.Resource
 import com.example.food.domain.repository.FoodRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,6 +36,20 @@ class FoodDBViewModel @Inject constructor(
 
     val favoriteDishes : LiveData<List<RecepFromIdList>> = foodRepository.getFavoriteDish().asLiveData()
 
+    private val _movieList = MutableStateFlow<List<RecepFromIdList>>(emptyList())
+    val movieList = _movieList.asStateFlow()
+    init {
+        viewModelScope.launch (Dispatchers.IO){
+            foodRepository.getFavoriteDish().distinctUntilChanged()
+                .collect{ listOfMovie->
+                    if (listOfMovie.isNullOrEmpty()){
+                        Log.d("TAG", ": Empty list")
+                    }else{
+                        _movieList.value = listOfMovie
+                    }
+                }
+        }
+    }
 //    fun getFoodFromDB() = liveData{
 //        foodRepository.getFoodDish().collect{
 //            emit(it)

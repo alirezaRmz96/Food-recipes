@@ -16,5 +16,4 @@ interface FoodRepository {
     fun getFavoriteDish():Flow<List<RecepFromIdList>>
     suspend fun updateFavDishDetails(recepFromIdList: RecepFromIdList)
     suspend fun deleteFavDishDetails(recepFromIdList: RecepFromIdList)
-
 }

@@ -4,7 +4,10 @@ import com.example.food.data.db.FoodDao
 import com.example.food.data.model.receFromId.RecepFromIdList
 import com.example.food.data.repository.dataSource.FoodLocalDataSource
 import com.example.food.data.util.Resource
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.flowOn
 
 class FoodLocalDataSourceImpl(
     private val foodDao: FoodDao
@@ -25,7 +28,7 @@ class FoodLocalDataSourceImpl(
         foodDao.deleteFavDishDetails(recepFromIdList)
     }
 
-    override fun getFavoriteDish(): Flow<List<RecepFromIdList>> {
-        return foodDao.getFavoriteDish()
-    }
+    override fun getFavoriteDish(): Flow<List<RecepFromIdList>> =
+        foodDao.getFavoriteDish().flowOn(Dispatchers.IO)
+            .conflate()
 }

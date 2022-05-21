@@ -59,9 +59,15 @@ class HomeFragment : Fragment() {
 
         initRecyclerView()
         categoryItemAdapter.setOnItemClickListener { name ->
-            foodViewModel.getInformationFood(name.CategoryName)
-            category = name.CategoryName
-            categoryBool = true
+            if (name.CategoryName == "All") {
+                foodViewModel.getAllFood()
+                category = name.CategoryName
+            }
+            else {
+                foodViewModel.getInformationFood(name.CategoryName)
+                category = name.CategoryName
+//                categoryBool = true
+            }
 
         }
         informationAdapter.setOnItemClickListenerInformation {
@@ -71,9 +77,9 @@ class HomeFragment : Fragment() {
 //
 //            }
             val bundle = Bundle().apply {
-                if (!categoryBool){
-                    category = "All"
-                }
+//                if (!categoryBool){
+//                    category = "All"
+//                }
                 putString("selected_category",category)
             }
             if (requireActivity() is MainActivity){
@@ -86,8 +92,9 @@ class HomeFragment : Fragment() {
             )
 
         }
-        setUpViewForAllFood()
+
         setUpViewForInformationFood()
+        setUpViewForAllFood()
     }
 
 

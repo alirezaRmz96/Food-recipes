@@ -13,10 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.food.R
-import com.example.food.data.model.allList.AllFoodResultList
 import com.example.food.data.model.receFromId.RecepFromIdList
-import com.example.food.data.model.specialFood.SpecialFood
-import com.example.food.data.util.Resource
 import com.example.food.databinding.FragmentDishDetailsBinding
 import com.example.food.ui.MainActivity
 import com.example.food.ui.viewModel.FoodDBViewModel
@@ -66,8 +63,7 @@ class DishDetailsFragment : Fragment() {
             }
         }
         foodViewModel.foodRecepFromID.observe(viewLifecycleOwner) { food ->
-
-
+            Log.d("TAG", "show fav: " + food)
             showSpecialDish(food,category)
         }
     }
