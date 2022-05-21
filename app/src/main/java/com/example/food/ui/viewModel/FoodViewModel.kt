@@ -38,6 +38,7 @@ class FoodViewModel(
     val foodLiveData: MutableLiveData<Resource<AllFoodList>> = MutableLiveData()
     val foodInformationLiveData: MutableLiveData<Resource<SpecialFood>> = MutableLiveData()
     val foodRecepFromID: MutableLiveData<RecepFromIdList> = MutableLiveData()
+
     private var lastString = ""
     val loadRandomDish = MutableLiveData<Boolean>()
 
@@ -46,7 +47,7 @@ class FoodViewModel(
         try {
 //            if (isNetWorking.getNetWork()){
             //1
-            if (lastString.isEmpty()) {
+            if (lastString == "All" || lastString.isEmpty()) {
                 //2
                 val apiResult = getAllFoodUseCase.execute()
                 foodLiveData.postValue(apiResult)

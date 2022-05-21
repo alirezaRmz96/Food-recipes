@@ -1,7 +1,5 @@
 package com.example.food.data.repository
 
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.distinctUntilChanged
 import com.example.food.data.model.allList.AllFoodList
 import com.example.food.data.model.receFromId.RecepFromIdList
 import com.example.food.data.model.specialFood.SpecialFood
@@ -10,8 +8,6 @@ import com.example.food.data.repository.dataSource.FoodRemoteDataSource
 import com.example.food.data.util.Resource
 import com.example.food.domain.repository.FoodRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.distinctUntilChanged
 import retrofit2.Response
 
 class FoodRepositoryImpl(
