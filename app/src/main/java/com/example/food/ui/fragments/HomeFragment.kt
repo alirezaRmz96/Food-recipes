@@ -8,6 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout.HORIZONTAL
 import android.widget.Toast
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.food.R
@@ -17,72 +20,68 @@ import com.example.food.databinding.FragmentHomeBinding
 import com.example.food.ui.MainActivity
 import com.example.food.ui.adapter.CategoryItemAdapter
 import com.example.food.ui.adapter.InformationAdapter
-import com.example.food.ui.viewModel.FoodDBViewModel
 import com.example.food.ui.viewModel.FoodViewModel
 import com.facebook.shimmer.ShimmerFrameLayout
+import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
 
     private lateinit var categoryItemAdapter: CategoryItemAdapter
     private lateinit var informationAdapter: InformationAdapter
-    private lateinit var mShimmerViewContainer: ShimmerFrameLayout;
+    private lateinit var mShimmerViewContainer: ShimmerFrameLayout
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var foodViewModel: FoodViewModel
     private var category = String()
-    private var categoryBool : Boolean = false
 
+    /*I can use another definition for view model
+    private val foodViewModels : FoodViewModel by lazy {
+        ViewModelProvider(requireActivity()).get(FoodViewModel::class.java)
+    }*/
+    private val foodViewModel: FoodViewModel by lazy {
+        (activity as MainActivity?)!!.getSharedViewModel(FoodViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        /** i can use another definition for inflate
+        binding = FragmentHomeBinding.inflate(layoutInflater,container,false)
+        return binding.root
+         */
         return inflater.inflate(R.layout.fragment_home, container, false)
 
     }
 
     override fun onResume() {
         super.onResume()
-        if (requireActivity() is MainActivity){
+        if (requireActivity() is MainActivity) {
             (activity as MainActivity?)!!.showBottomNavigationView()
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        foodViewModel = (activity as MainActivity).foodViewModel
+
         super.onViewCreated(view, savedInstanceState)
-//        setUpViewModel()
         binding = FragmentHomeBinding.bind(view)
 
         mShimmerViewContainer = binding.shimmer
         categoryItemAdapter = CategoryItemAdapter()
         informationAdapter = InformationAdapter()
 
-        initRecyclerView()
-        categoryItemAdapter.setOnItemClickListener { name ->
-            if (name.CategoryName == "All") {
-                foodViewModel.getAllFood()
-                category = name.CategoryName
-            }
-            else {
-                foodViewModel.getInformationFood(name.CategoryName)
-                category = name.CategoryName
-//                categoryBool = true
-            }
 
+        categoryItemAdapter.setOnItemClickListener { name ->
+            Log.d("TAG", "get1: " + name.CategoryName)
+
+            foodViewModel.getInformationFood(name.CategoryName)
         }
+
         informationAdapter.setOnItemClickListenerInformation {
             foodViewModel.getRecepFromId(it.id)
-//            val bundle = Bundle().apply {
-//                putSerializable("selected_food",it)
-//
-//            }
+
             val bundle = Bundle().apply {
-//                if (!categoryBool){
-//                    category = "All"
-//                }
-                putString("selected_category",category)
+                putString("selected_category", category)
             }
-            if (requireActivity() is MainActivity){
+            if (requireActivity() is MainActivity) {
                 (activity as MainActivity?)!!.hideBottomNavigationView()
             }
 
@@ -93,56 +92,33 @@ class HomeFragment : Fragment() {
 
         }
 
-        setUpViewForInformationFood()
-        setUpViewForAllFood()
-    }
+        initRecyclerView()
 
-
-    private fun setUpViewForAllFood() {
-        foodViewModel.getAllFood()
-
-        foodViewModel.foodLiveData.observe(viewLifecycleOwner) { response ->
-            when (response) {
-                is Resource.Success -> {
-                    mShimmerViewContainer.stopShimmer()
-                    mShimmerViewContainer.visibility = View.GONE
-                    response.data?.let {
-                        Log.d("TAG", "Data AllFood: ")
-                        informationAdapter.differAllFood.submitList(it.results)
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    foodViewModel.foodInformationFlow.collect { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                mShimmerViewContainer.stopShimmer()
+                                mShimmerViewContainer.visibility = View.GONE
+                                response.data?.let { specialFood ->
+                                    Log.d("TAG", "Data InformationFood: ")
+                                    informationAdapter.differAllFood.submitList(specialFood)
+                                }
+                            }
+                            is Resource.Error -> {
+                                mShimmerViewContainer.startShimmer()
+                                Toast.makeText(context, response.message, Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                            is Resource.Loading -> {
+                                Log.d("TAG", "Loading InformationFood: Loading")
+                                mShimmerViewContainer.startShimmer()
+                                mShimmerViewContainer.visibility = View.VISIBLE
+                            }
+                        }
                     }
-                }
-                is Resource.Error -> {
-                    mShimmerViewContainer.startShimmer()
-                    Toast.makeText(context, "Some things went to wrong", Toast.LENGTH_SHORT).show()
-                }
-                is Resource.Loading -> {
-                    Log.d("TAG", "Loading AllFood:")
-                    mShimmerViewContainer.startShimmer()
-                    mShimmerViewContainer.visibility = View.VISIBLE
-                }
-            }
-        }
-    }
-
-    private fun setUpViewForInformationFood() {
-        foodViewModel.foodInformationLiveData.observe(viewLifecycleOwner) { response ->
-            when (response) {
-                is Resource.Success -> {
-                    response.data?.let {
-                        Log.d("TAG", "Data InformationFood: ")
-                        informationAdapter.differAllFood.submitList(it)
-                        mShimmerViewContainer.stopShimmer()
-                        mShimmerViewContainer.visibility = View.GONE
-                    }
-                }
-                is Resource.Error -> {
-                    mShimmerViewContainer.startShimmer()
-                    Toast.makeText(context, "Some things went to wrong", Toast.LENGTH_SHORT).show()
-                }
-                is Resource.Loading -> {
-                    Log.d("TAG", "Loading InformationFood: Loading")
-                    mShimmerViewContainer.startShimmer()
-                    mShimmerViewContainer.visibility = View.VISIBLE
                 }
             }
         }
@@ -150,7 +126,6 @@ class HomeFragment : Fragment() {
 
     private fun initRecyclerView() {
         val categoryList = listOf(
-            Category(R.drawable.food, "All"),
             Category(R.drawable.caramel, "Caramel"),
             Category(R.drawable.fish, "Fish"),
             Category(R.drawable.meat, "Meat"),

@@ -15,4 +15,6 @@
     <color name="blue_grey_700">#37474f</color>
     <color name="grey_900">#212121</color>
     <color name="saved_button">#f4f4f4</color>
+    <color name="privacy">#d8dade</color>
+    <color name="settings">#ffd238</color>
 </resources>

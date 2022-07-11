@@ -17,9 +17,9 @@ import com.example.food.databinding.ItemCategoryBinding
  *  still has problem ->> cant design cate btn the way i want :(
  * **/
 
-class CategoryItemAdapter : RecyclerView.Adapter<CategoryItemAdapter.CategoryViewHolder>(){
+class CategoryItemAdapter : RecyclerView.Adapter<CategoryItemAdapter.CategoryViewHolder>() {
 
-    private val callback = object : DiffUtil.ItemCallback<Category>(){
+    private val callback = object : DiffUtil.ItemCallback<Category>() {
         override fun areItemsTheSame(oldItem: Category, newItem: Category): Boolean {
             return oldItem.CategoryName == newItem.CategoryName
         }
@@ -28,10 +28,11 @@ class CategoryItemAdapter : RecyclerView.Adapter<CategoryItemAdapter.CategoryVie
             return oldItem == newItem
         }
     }
-    val differ = AsyncListDiffer(this,callback)
+    val differ = AsyncListDiffer(this, callback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
-        val binding = ItemCategoryBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding =
+            ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CategoryViewHolder(binding)
     }
 
@@ -46,11 +47,11 @@ class CategoryItemAdapter : RecyclerView.Adapter<CategoryItemAdapter.CategoryVie
 
     inner class CategoryViewHolder(
         private val binding: ItemCategoryBinding
-    ):RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(category: Category) {
 
             binding.cateText.text = category.CategoryName
-           binding.cateImage.setImageResource(category.CategoryImage)
+            binding.cateImage.setImageResource(category.CategoryImage)
 
             binding.root.setOnClickListener {
                 onItemClickListener?.let {

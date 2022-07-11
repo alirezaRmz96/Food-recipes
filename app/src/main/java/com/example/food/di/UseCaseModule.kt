@@ -1,8 +1,7 @@
 package com.example.food.di
 
 import com.example.food.domain.repository.FoodRepository
-import com.example.food.domain.usecase.GetAllFoodUseCase
-import com.example.food.domain.usecase.GetInformationFoodUseCase
+import com.example.food.domain.usecase.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,18 +11,16 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class UseCaseModule {
+
     @Singleton
     @Provides
-    fun provideGetAllFoodRecep(
-        foodRepository: FoodRepository
-    ):GetAllFoodUseCase{
-        return GetAllFoodUseCase(foodRepository)
-    }
-    @Singleton
-    @Provides
-    fun provideGetInformationFood(
-        foodRepository: FoodRepository
-    ):GetInformationFoodUseCase{
-        return GetInformationFoodUseCase(foodRepository)
+    fun provideFoodUseCases(repository: FoodRepository):MovieUseCase{
+        return MovieUseCase(
+            getInformationFoodUseCase = GetInformationFoodUseCase(repository),
+            getRecepFromIdUseCase = GetRecepFromIdUseCase(repository),
+            deleteMovieUseCase = DeleteMovieUseCase(repository),
+            addFavFoodUseCase = AddFavFoodUseCase(repository),
+            getFoodFromDbUseCase = GetFoodFromDbUseCase(repository)
+        )
     }
 }
