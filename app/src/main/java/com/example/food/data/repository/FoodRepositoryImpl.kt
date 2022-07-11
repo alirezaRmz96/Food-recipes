@@ -1,13 +1,13 @@
 package com.example.food.data.repository
 
-import com.example.food.data.model.allList.AllFoodList
+import android.util.Log
 import com.example.food.data.model.receFromId.RecepFromIdList
 import com.example.food.data.model.specialFood.SpecialFood
 import com.example.food.data.repository.dataSource.FoodLocalDataSource
 import com.example.food.data.repository.dataSource.FoodRemoteDataSource
 import com.example.food.data.util.Resource
 import com.example.food.domain.repository.FoodRepository
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.*
 import retrofit2.Response
 
 class FoodRepositoryImpl(
@@ -15,13 +15,68 @@ class FoodRepositoryImpl(
     private val foodLocalDataSource: FoodLocalDataSource
 ) :FoodRepository{
 
+
+//    override  fun getFoodDish(ingredients: String): Flow<List<SpecialFood>> {
+//        return  getFoodFromDB(ingredients)
+//    }
+//
+//    private fun getFoodFromDB(ingredients: String):Flow<List<SpecialFood>>{
+//        lateinit var food : Flow<List<SpecialFood>>
+//        try {
+//            food = foodLocalDataSource.getFoodDish()
+//        }catch (exception: Exception) {
+//            Log.i("MyTag", exception.message.toString())
+//        }
+//        if (food){
+//            return food
+//        }else{
+//            food = getFoodFromApi(ingredients)
+//            foodLocalDataSource.saveFoodDishData(food)
+//        }
+//        return  food
+//    }
+//    private suspend fun getFoodFromApi(ingredients: String):Flow<List<SpecialFood>>{
+//        lateinit var food : Flow<List<SpecialFood>>
+//        try {
+//            val response = foodRemoteDataSource.getInformationFood(ingredients)
+//            if(response.isSuccessful){
+//                response.body()?.let {result->
+//                     food = Resource.Success(result)
+//                }
+//            }
+//
+//
+//        }
+//    }
+
+    // ------------- from api
+
+
+    override suspend fun getInformation(ingredients: String): Resource<SpecialFood> {
+        return responseToResource(
+            foodRemoteDataSource.getInformationFood(ingredients)
+        )
+    }
+
+    override suspend fun getRecepFromID(id: Int): Resource<RecepFromIdList> {
+        return responseToResource(
+            foodRemoteDataSource.getRecepFromId(id)
+        )
+    }
+
+    private fun <T> responseToResource(response : Response<T>):Resource<T>{
+        if(response.isSuccessful){
+            response.body()?.let {result->
+                return Resource.Success(result)
+            }
+        }
+        return Resource.Error(response.message())
+    }
+
+
     // ---------- from local
     override suspend fun insertFoodData(recepFromIdList: RecepFromIdList) {
         foodLocalDataSource.insertFoodDishData(recepFromIdList)
-    }
-
-    override fun getFoodDish(): Flow<List<RecepFromIdList>> {
-        return foodLocalDataSource.getFoodDish()
     }
 
     override fun getFavoriteDish(): Flow<List<RecepFromIdList>> {
@@ -32,53 +87,11 @@ class FoodRepositoryImpl(
         foodLocalDataSource.deleteFavDishDetails(recepFromIdList)
     }
 
+    override fun getFoodDish(ingredients: String): Flow<List<SpecialFood>> {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun updateFavDishDetails(recepFromIdList: RecepFromIdList) {
         foodLocalDataSource.updateFavDishDetails(recepFromIdList)
-    }
-
-    // ------------- from net
-    override suspend fun getAllFoodRecep(): Resource<AllFoodList> {
-        return responseToResource(
-            foodRemoteDataSource.getAllFood()
-        )
-    }
-
-    override suspend fun getInformation(ingredients: String): Resource<SpecialFood> {
-        return responseToResource1(
-            foodRemoteDataSource.getInformationFood(ingredients)
-        )
-    }
-
-    override suspend fun getRecepFromID(id: Int): Resource<RecepFromIdList> {
-        return responseToResource2(
-            foodRemoteDataSource.getRecepFromId(id)
-        )
-    }
-
-    // this have problem you muse use one just two
-    private fun responseToResource(response : Response<AllFoodList>):Resource<AllFoodList>{
-        if(response.isSuccessful){
-            response.body()?.let {result->
-                return Resource.Success(result)
-            }
-        }
-        return Resource.Error(response.message())
-    }
-
-    private fun responseToResource1(response : Response<SpecialFood>):Resource<SpecialFood>{
-        if(response.isSuccessful){
-            response.body()?.let {result->
-                return Resource.Success(result)
-            }
-        }
-        return Resource.Error(response.message())
-    }
-    private fun responseToResource2(response : Response<RecepFromIdList>):Resource<RecepFromIdList>{
-        if(response.isSuccessful){
-            response.body()?.let {result->
-                return Resource.Success(result)
-            }
-        }
-        return Resource.Error(response.message())
     }
 }

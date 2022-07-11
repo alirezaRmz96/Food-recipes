@@ -1,5 +1,4 @@
 package com.example.food.data.model.allList
-
 import java.io.Serializable
 
 data class AllFoodResultList(

@@ -11,16 +11,11 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.example.food.R
 import com.example.food.databinding.ActivityMainBinding
-import com.example.food.ui.viewModel.FoodViewModel
-import com.example.food.ui.viewModel.FoodViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var factory: FoodViewModelFactory
-    lateinit var foodViewModel: FoodViewModel
+
     private lateinit var mBinding : ActivityMainBinding
 
 
@@ -30,8 +25,8 @@ class MainActivity : AppCompatActivity() {
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
 
-        foodViewModel = ViewModelProvider(this,factory)
-            .get(FoodViewModel::class.java)
+
+
 
         val navView:BottomNavigationView = mBinding.navView
 
@@ -50,11 +45,13 @@ class MainActivity : AppCompatActivity() {
     fun <T : ViewModel> getSharedViewModel(viewModel: Class<T>): T {
         return ViewModelProvider(this).get(viewModel)
     }
+
     fun hideBottomNavigationView(){
         mBinding.navView.clearAnimation()
         mBinding.navView.animate().translationY(mBinding.navView.height.toFloat()).duration = 300
         mBinding.navView.visibility = View.GONE
     }
+
     fun showBottomNavigationView() {
         mBinding.navView.clearAnimation()
         mBinding.navView.animate().translationY(0f).duration = 300

@@ -1,7 +1,6 @@
 package com.example.food.data.api
 
 import com.example.food.BuildConfig
-import com.example.food.data.model.allList.AllFoodList
 import com.example.food.data.model.receFromId.RecepFromIdList
 import com.example.food.data.model.specialFood.SpecialFood
 import retrofit2.Response
@@ -10,11 +9,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface FoodApi {
-    @GET("complexSearch")
-    suspend fun getAllFood(
-        @Query("apiKey")
-        apiKey:String = BuildConfig.API_KEY
-    ):Response<AllFoodList>
 
     @GET("findByIngredients")
     suspend fun getSpecialFood(

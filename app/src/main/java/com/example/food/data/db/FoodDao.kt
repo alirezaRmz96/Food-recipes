@@ -2,7 +2,6 @@ package com.example.food.data.db
 
 import androidx.room.*
 import com.example.food.data.model.receFromId.RecepFromIdList
-import com.example.food.data.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 @Dao
