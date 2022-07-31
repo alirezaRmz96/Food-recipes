@@ -1,12 +1,12 @@
 package com.example.food.data.db
 
-import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
+import com.example.food.data.model.allList.AllFoodResultList
 import com.example.food.data.model.receFromId.RecepFromIdList
+import com.example.food.data.model.specialFood.SpecialFood
 
-@Database(entities = [RecepFromIdList::class], version = 1)
+@Database(entities = [RecepFromIdList::class,AllFoodResultList::class], version = 1, exportSchema = false)
+//@TypeConverters(Converter::class)
 abstract class FoodRoomDataBase : RoomDatabase() {
 
     abstract  fun foodDao():FoodDao

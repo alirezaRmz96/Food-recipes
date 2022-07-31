@@ -39,21 +39,10 @@ class FoodApiTest {
     }
 
     @Test
-    fun  getAllFood_sentRequest_receivedExpected(){
-        runBlocking {
-            enqueueMockResponse("AllFoodResponse.json")
-            val responseBody = service.getAllFood().body()
-            val request = server.takeRequest()
-            assertThat(responseBody).isNotNull()
-            assertThat(request.path).isEqualTo("/complexSearch?apiKey=b7789ce495454fa281f4d2500f9bcb53")
-            assertThat(responseBody!!.results.size).isEqualTo(10)
-        }
-    }
-    @Test
     fun getSpecialFood_sentRequest_receivedExpected(){
         runBlocking {
             enqueueMockResponse("SpecialFood.json")
-            val responseBody = service.getSpecialFood(ingredients = "Caramel")
+            val responseBody = service.getAllFood(ingredients = "Caramel")
             val request = server.takeRequest()
             assertThat(responseBody).isNotNull()
             assertThat(request.path).isEqualTo("/findByIngredients?apiKey=b7789ce495454fa281f4d2500f9bcb53&ingredients=Caramel&number=10")

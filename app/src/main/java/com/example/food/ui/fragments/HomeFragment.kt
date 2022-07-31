@@ -72,7 +72,7 @@ class HomeFragment : Fragment() {
         categoryItemAdapter.setOnItemClickListener { name ->
             Log.d("TAG", "get1: " + name.CategoryName)
 
-            foodViewModel.getInformationFood(name.CategoryName)
+            foodViewModel.getFoodFromAPI(name.CategoryName)
         }
 
         informationAdapter.setOnItemClickListenerInformation {
@@ -97,7 +97,7 @@ class HomeFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    foodViewModel.foodInformationFlow.collect { response ->
+                    foodViewModel.foodSpe.collect { response ->
                         when (response) {
                             is Resource.Success -> {
                                 mShimmerViewContainer.stopShimmer()
@@ -120,6 +120,17 @@ class HomeFragment : Fragment() {
                         }
                     }
                 }
+
+//                launch {
+//                    foodViewModel.food
+//                        .map {
+//                            it.isFetchingArticles
+//                        }
+//                        .distinctUntilChanged()
+//                        .collect{
+//                            Log.d("TAG", "onViewCreated: $it")
+//                        }
+//                }
             }
         }
     }
