@@ -10,6 +10,6 @@ import org.junit.runners.JUnit4
 class FoodViewModelTest{
 
     fun `empty movie list test`(){
-        
+
     }
 }
