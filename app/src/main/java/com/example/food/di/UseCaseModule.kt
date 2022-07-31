@@ -16,11 +16,11 @@ class UseCaseModule {
     @Provides
     fun provideFoodUseCases(repository: FoodRepository):MovieUseCase{
         return MovieUseCase(
-            getInformationFoodUseCase = GetInformationFoodUseCase(repository),
             getRecepFromIdUseCase = GetRecepFromIdUseCase(repository),
             deleteMovieUseCase = DeleteMovieUseCase(repository),
             addFavFoodUseCase = AddFavFoodUseCase(repository),
-            getFoodFromDbUseCase = GetFoodFromDbUseCase(repository)
+            getFoodFromDbUseCase = GetFoodFromDbUseCase(repository),
+            getFoodUseCase = GetFoodUseCase(repository)
         )
     }
 }

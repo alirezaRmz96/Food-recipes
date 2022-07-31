@@ -2,7 +2,10 @@ package com.example.food.ui.fragments
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -31,7 +34,8 @@ class DishDetailsFragment : Fragment() {
     private var binding: FragmentDishDetailsBinding? = null
     private var mProgressDialog: Dialog? = null
     private var recepFromIdList: RecepFromIdList? = null
-
+    private var recepList: RecepFromIdList? = null
+    private var category : String? = ""
 
     private val foodViewModel : FoodViewModel by lazy {
         (activity as MainActivity?)!!.getSharedViewModel(FoodViewModel::class.java)
@@ -51,7 +55,7 @@ class DishDetailsFragment : Fragment() {
         binding = FragmentDishDetailsBinding.bind(view)
 
         val args: DishDetailsFragmentArgs by navArgs()
-        val category = args.selectedCategory
+        category = args.selectedCategory
 
 
         lifecycleScope.launch {
@@ -59,6 +63,7 @@ class DishDetailsFragment : Fragment() {
                 launch {
                     showCustomDialog()
                     foodViewModel.foodRecepFromIDFlow.collect { response ->
+                        recepList = response.data
                         Log.d("TAG", "details 1: " + response.data)
                         when (response) {
                             is Resource.Success -> {
@@ -186,15 +191,48 @@ class DishDetailsFragment : Fragment() {
 
 
     private fun bottomSheet() {
-        val dialog = BottomSheetDialog(requireActivity())
-        val view = layoutInflater.inflate(R.layout.bottom_sheet_dialog, null)
-        val btnClose = view.findViewById<Button>(R.id.idBtnDismiss)
-        btnClose.setOnClickListener {
-            dialog.dismiss()
+//        val dialog = BottomSheetDialog(requireActivity())
+//        val view = layoutInflater.inflate(R.layout.bottom_sheet_dialog, null)
+//        val btnClose = view.findViewById<Button>(R.id.idBtnDismiss)
+//        btnClose.setOnClickListener {
+//            dialog.dismiss()
+//        }
+//        //dialog.setCancelable(false)
+//        dialog.setContentView(view)
+//        dialog.show()
+
+        // there is the best way for shared in below
+        val type = "text/plain"
+        val subject = "Checkout this dish recipe"
+        var extraText = ""
+        val shareWith = "Share with"
+        recepList?.let {
+            var image = ""
+            if (it.imageType == "Online"){
+                image = it.image!!
+            }
+            var cookingInstructions = ""
+            // The instruction or you can say the Cooking direction text is in the HTML format so we will you the fromHtml to populate it in the TextView.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                cookingInstructions = Html.fromHtml(
+                    it.instructions,
+                    Html.FROM_HTML_MODE_COMPACT
+                ).toString()
+            } else {
+                @Suppress("DEPRECATION")
+                cookingInstructions = Html.fromHtml(it.instructions).toString()
+            }
+            extraText =
+                "$image \n" +
+                        "\n Title:  ${it.title} \n\n Type: ${it.sourceName} \n\n Category: $category" +
+                        "\n\n summary: \n ${it.summary} \n\n Instructions To Cook: \n $cookingInstructions" +
+                        "\n\n Time required to cook the dish approx ${it.readyInMinutes} minutes."
         }
-        //dialog.setCancelable(false)
-        dialog.setContentView(view)
-        dialog.show()
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = type
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject)
+        intent.putExtra(Intent.EXTRA_TEXT, extraText)
+        startActivity(Intent.createChooser(intent, shareWith))
     }
 
     private fun showCustomDialog() {
